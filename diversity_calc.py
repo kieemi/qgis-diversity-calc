@@ -30,6 +30,7 @@ from .resources import *
 # Import the code for the dialog
 from .diversity_calc_dialog import DiversityCalcDialog
 import os.path
+from qgis.core import QgsMapLayerProxyModel, QgsFieldProxyModel
 
 
 class DiversityCalc:
@@ -188,7 +189,19 @@ class DiversityCalc:
         if self.first_start == True:
             self.first_start = False
             self.dlg = DiversityCalcDialog()
+            
+#             set filters for layer and fields selection
 
+            self.dlg.mcbPoly.setFilters(QgsMapLayerProxyModel.PolygonLayer)
+            self.dlg.mcbSite.setFilters(QgsMapLayerProxyModel.PolygonLayer) 
+
+            
+            self.dlg.fcbCategory.setFilters(QgsFieldProxyModel.String) 
+            self.dlg.fcbSite.setFilters(QgsFieldProxyModel.String) 
+            
+            self.dlg.fcbCategory.setLayer(self.dlg.mcbPoly.currentLayer()) 
+            self.dlg.fcbSite.setLayer(self.dlg.mcbSite.currentLayer()) 
+            
         # show the dialog
         self.dlg.show()
         # Run the dialog event loop
